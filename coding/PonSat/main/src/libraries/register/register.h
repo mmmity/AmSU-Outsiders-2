@@ -1,9 +1,9 @@
 #ifndef REGISTER_H
 #define REGISTER_H
-
+#include "Arduino.h"
 class Register
 {
-    int sh_cp, st_cp, ds, current_state;
+    byte sh_cp, st_cp, ds, current_state;
     public:
         void attach(byte sh, byte st, byte data);
         void write(byte bin);

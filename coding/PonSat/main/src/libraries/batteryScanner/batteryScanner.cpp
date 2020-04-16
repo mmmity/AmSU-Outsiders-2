@@ -3,6 +3,7 @@
 void BatteryScanner::attach(byte p)
 {
     pin = p;
+    pinMode(pin, 0);
 }
 float BatteryScanner::read()
 {

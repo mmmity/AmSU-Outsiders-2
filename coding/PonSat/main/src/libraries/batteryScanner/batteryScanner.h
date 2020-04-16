@@ -1,6 +1,7 @@
 #ifndef BATTERYSCANNER_H
 #define BATTERYSCANNER_H
 
+#include "Arduino.h"
 #include "../../config.h"
 
 class BatteryScanner{
