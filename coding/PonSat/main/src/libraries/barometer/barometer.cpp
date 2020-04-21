@@ -41,6 +41,7 @@ bool Barometer::init()
 
     measure();
     h0 = getHeight();
+    return true;
 }
 
 void Barometer::measure()
