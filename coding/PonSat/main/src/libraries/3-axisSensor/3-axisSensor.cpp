@@ -2,13 +2,15 @@
 
 void MPUSensor::I2Cread(uint8_t Address, uint8_t Register, uint8_t Nbytes, uint8_t* Data)
 {
-    Wire.beginTransmission(Address); // open the device
-    Wire.write(Register); // specify the starting register address
-    Wire.endTransmission(false);
-    int bytes = Wire.requestFrom(Address, Nbytes); // specify the number of bytes to receive
-    for(uint8_t i = 0; i < Nbytes; i++){ 
-        Data[i] = Wire.read();
-    }
+    Wire.beginTransmission(Address);
+    Wire.write(Register);
+    Wire.endTransmission();
+
+    // Read Nbytes
+    Wire.requestFrom(Address, Nbytes); 
+    uint8_t index=0;
+    while (Wire.available())
+    Data[index++]=Wire.read();
 }
 
 void MPUSensor::I2CwriteByte(uint8_t Address, uint8_t Register, uint8_t Data)
@@ -21,6 +23,7 @@ void MPUSensor::I2CwriteByte(uint8_t Address, uint8_t Register, uint8_t Data)
 
 void MPUSensor::init()
 {
+    Wire.begin();
     I2CwriteByte(MPU9250_ADDRESS,29,0x06);
     I2CwriteByte(MPU9250_ADDRESS,26,0x06);
     
@@ -32,8 +35,8 @@ void MPUSensor::init()
 
 void MPUSensor::measure()
 {
-    uint8_t Buf[20];
-    I2Cread(MPU9250_ADDRESS,0x3B,14,Buf);
+    uint8_t Buf[16];
+    I2Cread(MPU9250_ADDRESS,0x3B,16,Buf);
     aX=-(Buf[0]<<8 | Buf[1]);
     aY=-(Buf[2]<<8 | Buf[3]);
     aZ=Buf[4]<<8 | Buf[5];
@@ -42,18 +45,19 @@ void MPUSensor::measure()
     gY=-(Buf[10]<<8 | Buf[11]);
     gZ=Buf[12]<<8 | Buf[13];
 
-    // uint8_t ST1;
-    // do
-    // {
-    //     I2Cread(MAG_ADDRESS,0x02,1,&ST1);
-    // }
-    // while (!(ST1&0x01));
+    uint8_t ST1;
+    do
+    {
+        I2Cread(MAG_ADDRESS,0x02,1,&ST1);
+    }
+    while (!(ST1&0x01));
 
-    // uint8_t Mag[7]; 
-    // I2Cread(MAG_ADDRESS,0x03,7,Mag);
-    mX=(Buf[15]<<8 | Buf[14]);
-    mY=(Buf[17]<<8 | Buf[16]);
-    mZ=(Buf[19]<<8 | Buf[18]);
+    uint8_t Mag[8]; 
+    I2Cread(MAG_ADDRESS,0x03,8,Mag);
+
+    mX=-(Mag[3]<<8 | Mag[2]);
+    mY=-(Mag[1]<<8 | Mag[0]);
+    mZ=-(Mag[5]<<8 | Mag[4]);
 }
 
 float MPUSensor::getAcccelX()

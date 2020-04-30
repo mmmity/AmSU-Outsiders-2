@@ -26,6 +26,10 @@ magScaleX = 0.18
 magScaleY = 0.18
 magScaleZ = 0.17
 
+mX = magScaleX * mag.iloc[:, 0]
+mY = magScaleY * mag.iloc[:, 1]
+mZ = magScaleZ * mag.iloc[:, 2]
+
 data = {
     'TeamID': data.iloc[:, 0],
     'Time': data.iloc[:, 1],
@@ -36,9 +40,12 @@ data = {
     'gX_rads': gX,
     'gY_rads': gY,
     'gZ_rads': gZ,
+    'mX_uT': mX,
+    'mY_uT': mY,
+    'mZ_uT': mZ,
 }
 
-data = pd.DataFrame(data, columns=['TeamID', 'Time', 'Altitude', 'aX_mss', 'aY_mss', 'aZ_mss', 'gX_rads', 'gY_rads', 'gZ_rads',])
+data = pd.DataFrame(data, columns=['TeamID', 'Time', 'Altitude', 'aX_mss', 'aY_mss', 'aZ_mss', 'gX_rads', 'gY_rads', 'gZ_rads', 'mX_uT', 'mY_uT', 'mZ_uT',])
 
 
 print(data)
