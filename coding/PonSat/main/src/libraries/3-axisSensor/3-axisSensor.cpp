@@ -104,3 +104,8 @@ float MPUSensor::getMagZ()
 {
     return mZ;
 }
+
+float MPUSensor::getAccel()
+{
+    return sqrt(aX * aX + aY * aY + aZ * aZ);
+}

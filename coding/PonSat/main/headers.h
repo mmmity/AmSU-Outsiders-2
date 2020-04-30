@@ -1,0 +1,7 @@
+#include "src/config.h"
+#include "src/libraries/register/register.h"
+#include "src/libraries/lightLevelScanner/lightLevelScanner.h"
+#include "src/libraries/batteryScanner/batteryScanner.h"
+#include "src/libraries/barometer/barometer.h"
+#include "src/libraries/3-axisSensor/3-axisSensor.h"
+#include "src/libraries/logger/logger.h"
