@@ -1,7 +1,7 @@
 
 #include "headers.h"
 
-bool stp = 0, spp = 0, rcp = 0, lnp = 0;
+bool stp = 0, hgp = 0, spp = 0, rcp = 0, lnp = 0;
 int landingCounter = 0;
 
 Barometer bmp;
@@ -11,14 +11,17 @@ SerialLogger radio;
 SDLogger sd;
 BatteryScanner battery;
 LightLevelScanner light;
-
+Pieso pso;
+RecoverySystem rs;
 
 void setup()
 {
-    pinMode(PSO_PIN, 1);
+    rs.attach(SERVO_1_PIN, SERVO_2_PIN);
+    pso.attach(PSO_PIN);
     bmp.init();
     mpu.init();
     radio.init();
+    rs.init();
     //sd.init();
     battery.attach(BATTERY_PIN);
     light.attach(LIGHT_PIN);
@@ -32,7 +35,12 @@ void loop()
     bmp.measure();
     mpu.measure();
     
-    if(rcp == 1)
+    if(bmp.getHeight() > 50)
+    {
+        hgp = true;
+    }
+
+    if(rcp)
     {
         if(abs(mpu.getAcccelX()) < ACCEL_LIMIT && abs(mpu.getAcccelY()) < ACCEL_LIMIT && abs(mpu.getAcccelZ()) < ACCEL_LIMIT)
         {
@@ -42,10 +50,7 @@ void loop()
                 lnp = 1;
                 while(1)
                 {
-                    tone(PSO_PIN, 50);
-                    delay(100);
-                    noTone(PSO_PIN);
-                    delay(100);
+                    pso.ring();
                     radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
                 }
             }
@@ -57,9 +62,20 @@ void loop()
     }
     else
     {
-        if(spp == 1)
+        if(bmp.getHeight() < 50)
         {
-            
+
+        }
+        if(light.separation())
+        {
+            spp = 1;
+        }
+        else
+        {
+            if(bmp.getHeight() > 5)
+            {
+                stp = true;
+            }
         }
     }
     

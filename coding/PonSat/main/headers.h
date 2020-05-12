@@ -5,3 +5,5 @@
 #include "src/libraries/barometer/barometer.h"
 #include "src/libraries/3-axisSensor/3-axisSensor.h"
 #include "src/libraries/logger/logger.h"
+#include "src/libraries/Pieso/Pieso.h"
+#include "src/libraries/recoverySystem/recoverySystem.h"

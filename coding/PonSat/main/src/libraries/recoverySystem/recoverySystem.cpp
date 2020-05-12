@@ -1,22 +1,19 @@
 #include "recoverySystem.h"
 
-void Servo::attach(byte pin)
+void RecoverySystem::attach(byte pin1, byte pin2)
 {
-    this->pin = pin;
-    pinMode(pin, 1);
+    srv1.attach(pin1);
+    srv2.attach(pin2);
 }
 
-void Servo::write(int steps) // 1 step = 10 degrees
+void RecoverySystem::init()
 {
-    pos = steps;
-    digitalWrite(pin, 1);
-    int time = MIN_PULSE_WIDTH + STEP_WIDTH * steps;
-    delayMicroseconds(time);
-    digitalWrite(pin, 0);
-    delayMicroseconds(PULSE_WIDTH - time);
+    srv1.write(SERVO_1_START_POS);
+    srv2.write(SERVO_2_START_POS);
 }
 
-int Servo::getPos()
+void RecoverySystem::recover()
 {
-    return pos;
+    srv1.write(SERVO_1_REC_POS);
+    srv2.write(SERVO_2_REC_POS);
 }

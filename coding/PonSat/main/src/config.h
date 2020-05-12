@@ -42,6 +42,14 @@
 #define MIN_PULSE_WIDTH 544
 #define STEP_WIDTH 103
 
+#define SERVO_1_START_POS 90
+#define SERVO_2_START_POS 90
+#define SERVO_1_REC_POS 60
+#define SERVO_2_REC_POS 120
+
+#define SERVO_1_PIN 8
+#define SERVO_2_PIN 9
+
 //===================================================//
 
 
@@ -51,5 +59,14 @@
 #define TEAM_ID "A1"
 #define ACCEL_LIMIT 8500
 #define PSO_PIN 8
+
+//===================================================//
+
+
+// Pieso variables
+//===================================================//
+
+#define TIME_OF_TONE 100
+#define TONE 50
 
 //===================================================//
