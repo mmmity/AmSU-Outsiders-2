@@ -3,12 +3,12 @@
 #include "Arduino.h"
 class Register
 {
-    byte sh_cp, st_cp, ds, current_state;
+    byte sh_cp, st_cp, ds;
+    bool currentState[8];
     public:
         void attach(byte sh, byte st, byte data);
-        void write(byte bin);
+        void write(bool state[8]);
         void setPin(byte pin, bool value);
-        byte read();
 };
 
 #endif

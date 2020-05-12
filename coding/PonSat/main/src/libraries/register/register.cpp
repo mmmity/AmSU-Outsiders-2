@@ -10,25 +10,32 @@ void Register::attach(byte sh, byte st, byte data)
     pinMode(ds, 1);
 }
 
-void Register::write(byte bin)
+void Register::write(bool state[8])
 {
-    current_state = bin;
+    for(int i = 0; i < 8; i++)
+    {
+        currentState[i] = state[i];
+    }
     digitalWrite(st_cp, LOW);
-    shiftOut(ds, sh_cp, MSBFIRST, bin);
+    for(int i = 0; i < 8; i++)
+    {
+        digitalWrite(sh_cp, LOW);
+        digitalWrite(ds, currentState[i]);
+        digitalWrite(sh_cp, HIGH);
+    }
     digitalWrite(st_cp, HIGH);
 }
 
-byte Register::read()
-{
-    return current_state;
-}
 
 void Register::setPin(byte pin, bool value)
 {
-    if(value == true){
-        write((read() || pow(2, pin)));
+    currentState[pin] = value;
+    digitalWrite(st_cp, LOW);
+    for(int i = 0; i < 8; i++)
+    {
+        digitalWrite(sh_cp, LOW);
+        digitalWrite(ds, currentState[i]);
+        digitalWrite(sh_cp, HIGH);
     }
-    else{
-        write((read() && 255 - pow(2, pin)));
-    }
+    digitalWrite(st_cp, HIGH);
 }
