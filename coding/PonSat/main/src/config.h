@@ -42,13 +42,10 @@
 #define MIN_PULSE_WIDTH 544
 #define STEP_WIDTH 103
 
-#define SERVO_1_START_POS 90
-#define SERVO_2_START_POS 90
-#define SERVO_1_REC_POS 60
-#define SERVO_2_REC_POS 120
+#define SERVO_START_POS 9
+#define SERVO_REC_POS 6
 
-#define SERVO_1_PIN 8
-#define SERVO_2_PIN 9
+#define SERVO_PIN 8
 
 //===================================================//
 

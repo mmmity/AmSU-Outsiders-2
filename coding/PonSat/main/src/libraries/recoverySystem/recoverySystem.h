@@ -3,14 +3,12 @@
 
 #include "../../config.h"
 #include "Arduino.h"
-#include <Servo.h>
 
 class RecoverySystem
 {
-    Servo srv1;
-    Servo srv2;
+    byte pin;
     public:
-        void attach(byte pin1, byte pin2);
+        void attach(byte p);
         void init();
         void recover();
 };

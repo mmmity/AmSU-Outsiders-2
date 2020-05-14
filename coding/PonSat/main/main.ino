@@ -2,6 +2,7 @@
 #include "headers.h"
 
 bool stp = 0, hgp = 0, spp = 0, rcp = 0, lnp = 0;
+int prev_height = -1, prev_height_counter = 0;
 int landingCounter = 0;
 bool leds[8] = {1, 0, 0, 1, 0, 1, 0, 1};
 
@@ -33,56 +34,77 @@ void setup()
 
 void loop()
 {
-    // bmp.measure();
-    // mpu.measure();
+    bmp.measure();
+    mpu.measure();
     
-    // if(bmp.getHeight() > 50)
-    // {
-    //     hgp = true;
-    // }
+    if(stp)
+    {
+        if(prev_height == -1)
+        {
+            prev_height = bmp.getHeight();
+        }
+        else
+        {
+            if(prev_height_counter < 5)
+            {
+                prev_height_counter++;
+            }
+            else
+            {
+                if(bmp.getHeight() < prev_height_counter)
+                {
+                    hgp = 1;
+                    if(!spp)
+                    {
+                        rs.recover();
+                        rcp = 1;
+                    }
+                }
+                else
+                {
+                    prev_height = -1;
+                    prev_height_counter = 0;
+                }
+            }
+        }
+    }
 
-    // if(rcp)
-    // {
-    //     if(abs(mpu.getAcccelX()) < ACCEL_LIMIT && abs(mpu.getAcccelY()) < ACCEL_LIMIT && abs(mpu.getAcccelZ()) < ACCEL_LIMIT)
-    //     {
-    //         landingCounter += 1;
-    //         if(landingCounter >= 900)
-    //         {
-    //             lnp = 1;
-    //             while(1)
-    //             {
-    //                 pso.ring();
-    //                 radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
-    //             }
-    //         }
-    //     }
-    //     else
-    //     {
-    //         landingCounter = 0;
-    //     }
-    // }
-    // else
-    // {
-    //     if(bmp.getHeight() < 50)
-    //     {
-
-    //     }
-    //     if(light.separation())
-    //     {
-    //         spp = 1;
-    //     }
-    //     else
-    //     {
-    //         if(bmp.getHeight() > 5)
-    //         {
-    //             stp = true;
-    //         }
-    //     }
-    // }
+    if(rcp)
+    {
+        if(abs(mpu.getAcccelX()) < ACCEL_LIMIT && abs(mpu.getAcccelY()) < ACCEL_LIMIT && abs(mpu.getAcccelZ()) < ACCEL_LIMIT)
+        {
+            landingCounter += 1;
+            if(landingCounter >= 900)
+            {
+                lnp = 1;
+                while(1)
+                {
+                    pso.ring();
+                    radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
+                }
+            }
+        }
+        else
+        {
+            landingCounter = 0;
+        }
+    }
+    else
+    {
+        if(light.separation())
+        {
+            spp = 1;
+        }
+        else
+        {
+            if(bmp.getHeight() > 5)
+            {
+                stp = true;
+            }
+        }
+    }
     
 
-    // radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
-    // delay(200);
-    reg.write(leds);
-    delay(1000);
+    radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
+    delay(200);
 }

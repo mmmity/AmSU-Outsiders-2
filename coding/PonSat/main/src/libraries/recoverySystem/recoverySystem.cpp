@@ -1,19 +1,23 @@
 #include "recoverySystem.h"
 
-void RecoverySystem::attach(byte pin1, byte pin2)
+void RecoverySystem::attach(byte p)
 {
-    srv1.attach(pin1);
-    srv2.attach(pin2);
+    pin = p; 
+    pinMode(pin, 1);
 }
 
 void RecoverySystem::init()
 {
-    srv1.write(SERVO_1_START_POS);
-    srv2.write(SERVO_2_START_POS);
+    digitalWrite(pin, 1);
+    delay(MIN_PULSE_WIDTH + STEP_WIDTH * SERVO_START_POS);
+    digitalWrite(pin, 0);
+    delay(PULSE_WIDTH - MIN_PULSE_WIDTH - STEP_WIDTH * SERVO_START_POS);
 }
 
 void RecoverySystem::recover()
 {
-    srv1.write(SERVO_1_REC_POS);
-    srv2.write(SERVO_2_REC_POS);
+    digitalWrite(pin, 1);
+    delay(MIN_PULSE_WIDTH + STEP_WIDTH * SERVO_REC_POS);
+    digitalWrite(pin, 0);
+    delay(PULSE_WIDTH - MIN_PULSE_WIDTH - STEP_WIDTH * SERVO_REC_POS);
 }
