@@ -5,7 +5,7 @@
 
 bool stp = 0, spp = 0, rcp = 0, lnp = 0;    // Фазы полета
 int landingCounter = 0;                     // Счетчик для определения факта приземления
-bool leds[8] = {1, 0, 0, 1, 0, 1, 0, 1};    // Массив значений регистра
+bool leds[8] = {1, 1, 0, 0, 0, 0, 0, 0};    // Массив значений регистра
 
 Barometer bmp;
 MPUSensor mpu;
@@ -16,6 +16,8 @@ BatteryScanner battery;
 LightLevelScanner light;                    // Объявление объектов
 Pieso pso;                                  // Все классы писал сам UwU
 RecoverySystem rs;
+Button testBtn;
+Button userBtn;
 
 void setup()
 {
@@ -26,15 +28,44 @@ void setup()
     radio.init();                           // Все названия методов стандартизированы
     rs.init();                              // Шикарно :)
     //sd.init();
+    testBtn.attach(TEST_BUTTON_PIN);
+    userBtn.attach(USER_BUTTON_PIN);
     battery.attach(BATTERY_PIN);
     light.attach(LIGHT_PIN);
     reg.attach(REG_SH_PIN, REG_ST_PIN, REG_DATA_PIN);
-    delay(10000);
+    
+    for(int i = 0; i < int(battery.read() / 12); i++)
+    {
+        leds[i] = 1;
+    }
+    reg.write(leds);
+    delay(2000);
+    for(int i = 0; i < 8; i++)
+    {
+        leds[i] = i < 2 ? 1 : 0;
+    } 
+    delay(8000);
     light.init();                           // А фоторезистор инициализируем после укомплектации
+    leds[2] = 1;
 }
 
 void loop()
 {
+    if (testBtn.pressed())
+    {
+        leds[3] = 1;
+        if (mpu.getAcccelX() > 20000)
+        {
+            leds[4] = 1;
+        }
+        else
+        {
+            {
+            
+            }
+        }
+        
+    }
     bmp.measure();
     mpu.measure();
     
@@ -46,6 +77,7 @@ void loop()
             if(landingCounter >= 900)   // Думаю, трех минут хватит
             {
                 lnp = 1;
+                leds[7] = 1;
                 while(1)
                 {
                     pso.ring();         // Всё нормально, задержка есть в методе ring
@@ -65,6 +97,7 @@ void loop()
             if(bmp.getHeight() <= 50)
             {
                 rcp = 1;
+                leds[6] = 1;
                 rs.recover();            // Максимальная абстракция OwO
             }
         }
@@ -73,16 +106,18 @@ void loop()
             if(light.separation())       // Я просто поражаюсь этой абстракции UwU
             {
                 spp = 1;
+                leds[5] = 1;
             }
         }                                // Я думаю эта команда точно выиграет
     }                                    // И вообще, они мои любимчики теперь <3
     
-    if(bmp.getHeight() > 5)              // По-моему 5 - идеальный выбор
+    if(abs(mpu.getAcccelX()) > 20000)    // По-моему 5 - идеальный выбор
     {                                    // Надо было запихать в константу HEIGHT_LIMIT
         stp = 1;
+        leds[4] = 1;
     }
     
-
+    reg.write(leds);
     radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
     delay(200);
 }
