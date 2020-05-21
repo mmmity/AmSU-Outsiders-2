@@ -2,6 +2,7 @@
 #define LOGGER_H
 #include "../../config.h"
 #include "Arduino.h"
+#include "PetitFS.h"
 
 class SerialLogger
 {
@@ -12,6 +13,7 @@ class SerialLogger
 
 class SDLogger
 {
+    FATFS fs;
     public:
         void init();
         void write(String str);

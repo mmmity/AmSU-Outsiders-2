@@ -27,7 +27,7 @@ void setup()
     mpu.init();                             // Просто посмотрите на это
     radio.init();                           // Все названия методов стандартизированы
     rs.init();                              // Шикарно :)
-    //sd.init();
+    sd.init();
     testBtn.attach(TEST_BUTTON_PIN);
     userBtn.attach(USER_BUTTON_PIN);
     battery.attach(BATTERY_PIN);
@@ -54,70 +54,81 @@ void loop()
     if (testBtn.pressed())
     {
         leds[3] = 1;
+        reg.write(leds);
         if (mpu.getAcccelX() > 20000)
         {
             leds[4] = 1;
+            reg.write(leds);
         }
-        else
+        if (light.separation())
         {
-            {
-            
-            }
+            leds[5] = 1;
+            reg.write(leds);
+            delay(5000);
+            rs.recover();
+            leds[6] = 1;
+            reg.write(leds);
+            delay(5000);
+            leds[7] = 1;
+            reg.write(leds);
         }
-        
     }
-    bmp.measure();
-    mpu.measure();
-    
-    if(rcp) // Проверка на приземление
+    else 
     {
-        if(abs(mpu.getAcccelX()) < ACCEL_LIMIT && abs(mpu.getAcccelY()) < ACCEL_LIMIT && abs(mpu.getAcccelZ()) < ACCEL_LIMIT)
+        bmp.measure();
+        mpu.measure();
+        
+        if(rcp) // Проверка на приземление
         {
-            landingCounter += 1;
-            if(landingCounter >= 900)   // Думаю, трех минут хватит
+            if(abs(mpu.getAcccelX()) < ACCEL_LIMIT && abs(mpu.getAcccelY()) < ACCEL_LIMIT && abs(mpu.getAcccelZ()) < ACCEL_LIMIT)
             {
-                lnp = 1;
-                leds[7] = 1;
-                while(1)
+                landingCounter += 1;
+                if(landingCounter >= 900)   // Думаю, трех минут хватит
                 {
-                    pso.ring();         // Всё нормально, задержка есть в методе ring
-                    radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
+                    lnp = 1;
+                    leds[7] = 1;
+                    while(1)
+                    {
+                        pso.ring();         // Всё нормально, задержка есть в методе ring
+                        radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
+                    }
                 }
             }
-        }
-        else
-        {
-            landingCounter = 0;
-        }
-    }
-    else                                // Чтобы не повторять один и тот же код когда он не нужен
-    {
-        if(spp)                         // Ждем-с 50 метров с:
-        {
-            if(bmp.getHeight() <= 50)
+            else
             {
-                rcp = 1;
-                leds[6] = 1;
-                rs.recover();            // Максимальная абстракция OwO
+                landingCounter = 0;
             }
         }
-        else                             // Уходим вглубь...
+        else                                
         {
-            if(light.separation())       // Я просто поражаюсь этой абстракции UwU
-            {
-                spp = 1;
-                leds[5] = 1;
+            if(spp)                         // Ждем-с 50 метров, а потом спасаемся
+            {                               // c:
+                if(bmp.getHeight() <= 50)
+                {
+                    rcp = 1;
+                    leds[6] = 1;
+                    rs.recover();            // Максимальная абстракция OwO
+                }
             }
-        }                                // Я думаю эта команда точно выиграет
-    }                                    // И вообще, они мои любимчики теперь <3
-    
-    if(abs(mpu.getAcccelX()) > 20000)    // По-моему 5 - идеальный выбор
-    {                                    // Надо было запихать в константу HEIGHT_LIMIT
-        stp = 1;
-        leds[4] = 1;
+            else                            
+            {
+                if(light.separation())       // Я просто поражаюсь этой абстракции UwU
+                {
+                    spp = 1;
+                    leds[5] = 1;
+                }
+            }                                // Я думаю эта команда точно выиграет
+        }                                    // И вообще, они мои любимчики теперь <3
+        
+        if(abs(mpu.getAcccelX()) > 20000)    // Проверяем на резкое ускорение вверх
+        {                                    // Если да, то спутник взлетел
+            stp = 1;
+            leds[4] = 1;
+        }
+        
+        reg.write(leds);
+        radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
+        sd.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAcccelX(), mpu.getAcccelY(), mpu.getAcccelZ(), mpu.getGyroX(), mpu.getGyroX(), mpu.getGyroZ(), mpu.getMagX(), mpu.getMagY(), mpu.getMagZ(), bmp.getPressure(), stp, spp, rcp, lnp);
+        delay(200);
     }
-    
-    reg.write(leds);
-    radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
-    delay(200);
 }
