@@ -5,6 +5,7 @@
 
 bool stp = 0, spp = 0, rcp = 0, lnp = 0;    // Фазы полета
 int landingCounter = 0;                     // Счетчик для определения факта приземления
+int testModeCounter = 0;                    // Счетчик для обеспечения задержек в тестовом режиме
 bool leds[8] = {1, 1, 0, 0, 0, 0, 0, 0};    // Массив значений регистра
 
 Barometer bmp;
@@ -59,20 +60,19 @@ void loop()
         if (mpu.getAcccelX() > 20000)
         {
             leds[4] = 1;
-            reg.write(leds);
         }
         if (light.separation())
         {
             leds[5] = 1;
-            reg.write(leds);
-            delay(5000);
-            rs.recover();
-            leds[6] = 1;
-            reg.write(leds);
-            delay(5000);
-            leds[7] = 1;
-            reg.write(leds);
+            if(testModeCounter >= 25)
+            {
+                rs.recover();
+                leds[6] = 1;
+            }
+            if (testModeCounter) leds[7] = 1;
         }
+        reg.write(leds);
+        delay(200);
     }
     else 
     {
@@ -91,7 +91,6 @@ void loop()
                     while(1)
                     {
                         pso.ring();         // Всё нормально, задержка есть в методе ring
-                        radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
                     }
                 }
             }
@@ -121,7 +120,7 @@ void loop()
             }                                // Я думаю эта команда точно выиграет
         }                                    // И вообще, они мои любимчики теперь <3
         
-        if(abs(mpu.getAcccelX()) > 20000)    // Проверяем на резкое ускорение вверх
+        if(mpu.getAccel() > 20000)    // Проверяем на резкое ускорение вверх
         {                                    // Если да, то спутник взлетел
             stp = 1;
             leds[4] = 1;
