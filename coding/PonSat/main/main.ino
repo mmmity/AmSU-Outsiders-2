@@ -21,6 +21,7 @@ Button userBtn;
 
 void setup()
 {
+    Wire.begin();                           // Здесь запускаем I2C
     rs.attach(SERVO_PIN);
     pso.attach(PSO_PIN);
     bmp.init();

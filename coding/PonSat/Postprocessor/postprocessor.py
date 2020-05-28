@@ -43,9 +43,15 @@ data = {
     'mX_uT': mX,
     'mY_uT': mY,
     'mZ_uT': mZ,
+    'P_hPa': data.iloc[:, 12],
+    'Temp_C': data.iloc[:, 13],
+    'Start': data.iloc[:, 14],
+    'Separation': data.iloc[:, 15],
+    'Recovery': data.iloc[:, 16],
+    'Landing': data.iloc[:, 17]
 }
 
-data = pd.DataFrame(data, columns=['TeamID', 'Time', 'Altitude', 'aX_mss', 'aY_mss', 'aZ_mss', 'gX_rads', 'gY_rads', 'gZ_rads', 'mX_uT', 'mY_uT', 'mZ_uT',])
+data = pd.DataFrame(data, columns=['TeamID', 'Time', 'Altitude', 'aX_mss', 'aY_mss', 'aZ_mss', 'gX_rads', 'gY_rads', 'gZ_rads', 'mX_uT', 'mY_uT', 'mZ_uT', 'P_hPa', 'Temp_C', 'Start', 'Separation', 'Recovery', 'Landing'])
 
 
 print(data)

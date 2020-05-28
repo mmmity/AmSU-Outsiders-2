@@ -6,6 +6,7 @@
 
 class Barometer
 {
+    public:
     unsigned int dig_T1;
     int dig_T2;
     int dig_T3;
