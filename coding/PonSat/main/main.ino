@@ -3,8 +3,7 @@
 
 #include "headers.h"                        // Там тоже весело
 
-bool stp = 0, spp = 0, rcp = 0, lnp = 0;    // Фазы полета
-int landingCounter = 0;                     // Счетчик для определения факта приземления
+bool stp = 0, spp = 0, rcp = 0, lnp = 0;    // Фазы полета       
 int testModeCounter = 0;                    // Счетчик для обеспечения задержек в тестовом режиме
 bool leds[8] = {1, 1, 0, 0, 0, 0, 0, 0};    // Массив значений регистра
 
@@ -79,29 +78,15 @@ void loop()
     {
         bmp.measure();
         mpu.measure();
-        
-        if(rcp) // Проверка на приземление
+
+        if(lnp)
         {
-            if(abs(mpu.getAcccelX()) < ACCEL_LIMIT && abs(mpu.getAcccelY()) < ACCEL_LIMIT && abs(mpu.getAcccelZ()) < ACCEL_LIMIT)
+            while(1)
             {
-                landingCounter += 1;
-                if(landingCounter >= 900)   // Думаю, трех минут хватит
-                {
-                    lnp = 1;
-                    leds[7] = 1;
-                    while(1)
-                    {
-                        pso.ring();         // Всё нормально, задержка есть в методе ring
-                    }
-                }
-            }
-            else
-            {
-                landingCounter = 0;
+                pso.ring();         // Всё нормально, задержка есть в методе ring
             }
         }
-        else                                
-        {
+        
             if(spp)                         // Ждем-с 50 метров, а потом спасаемся
             {                               // c:
                 if(bmp.getHeight() <= 50)
@@ -110,18 +95,21 @@ void loop()
                     leds[6] = 1;
                     rs.recover();            // Максимальная абстракция OwO
                 }
+                if(bmp.getHeight() <= 5)
+                {
+                    lnp = 1;
+                }
             }
             else                            
             {
                 if(light.separation())       // Я просто поражаюсь этой абстракции UwU
                 {
                     spp = 1;
-                    leds[5] = 1;
+                    leds[5] = 1;            // Я думаю эта команда точно выиграет  
                 }
-            }                                // Я думаю эта команда точно выиграет
-        }                                    // И вообще, они мои любимчики теперь <3
+            }                               // И вообще, они мои любимчики теперь <3
         
-        if(mpu.getAccel() > 20000)    // Проверяем на резкое ускорение вверх
+        if(mpu.getAccel() > 20000)           // Проверяем на резкое ускорение
         {                                    // Если да, то спутник взлетел
             stp = 1;
             leds[4] = 1;
