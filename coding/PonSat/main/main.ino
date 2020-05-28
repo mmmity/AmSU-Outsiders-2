@@ -69,7 +69,8 @@ void loop()
                 rs.recover();
                 leds[6] = 1;
             }
-            if (testModeCounter) leds[7] = 1;
+            if (testModeCounter >= 50) leds[7] = 1;
+            testModeCounter ++ ;
         }
         reg.write(leds);
         delay(200);
