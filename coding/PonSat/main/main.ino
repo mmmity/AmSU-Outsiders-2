@@ -56,6 +56,7 @@ void loop()
     {
         leds[3] = 1;
         reg.write(leds);
+        mpu.measure();
         if (mpu.getAcccelX() > 20000)
         {
             leds[4] = 1;
@@ -117,7 +118,7 @@ void loop()
         
         reg.write(leds);
         radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
-        sd.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAcccelX(), mpu.getAcccelY(), mpu.getAcccelZ(), mpu.getGyroX(), mpu.getGyroX(), mpu.getGyroZ(), mpu.getMagX(), mpu.getMagY(), mpu.getMagZ(), bmp.getPressure(), stp, spp, rcp, lnp);
+        sd.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAcccelX(), mpu.getAcccelY(), mpu.getAcccelZ(), mpu.getGyroX(), mpu.getGyroX(), mpu.getGyroZ(), mpu.getMagX(), mpu.getMagY(), mpu.getMagZ(), bmp.getPressure(), bmp.getTemperature(), stp, spp, rcp, lnp);
         delay(200);
     }
 }

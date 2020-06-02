@@ -42,7 +42,7 @@ void SDLogger::write(String str)
     pf_write(buf, sizeof(buf), &nr);
 }
 
-void SDLogger::writeCanSat(String teamID, long time, float alt, float ax, float ay, float az, float gx, float gy, float gz, float mx, float my, float mz, float pressure, bool stp, bool spp, bool rcp, bool lnp)
+void SDLogger::writeCanSat(String teamID, long time, float alt, float ax, float ay, float az, float gx, float gy, float gz, float mx, float my, float mz, float pressure, float temp, bool stp, bool spp, bool rcp, bool lnp)
 {
     write(teamID);
     write(";");
@@ -69,6 +69,8 @@ void SDLogger::writeCanSat(String teamID, long time, float alt, float ax, float 
     write(String(mz));
     write(";");
     write(String(pressure));
+    write(";");
+    write(String(temp));
     write(";");
     write(String(stp));
     write(";");
