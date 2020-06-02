@@ -1,8 +1,10 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 #include "../../config.h"
-#include "Arduino.h"
 #include "PetitFS.h"
+#include <GyverUART.h>
+
+#define Serial uart 
 
 class SerialLogger
 {
