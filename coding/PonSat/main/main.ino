@@ -39,7 +39,7 @@ void setup()
     {
         leds[i] = 1;
     }
-    reg.write(leds);
+    //reg.write(leds);
     delay(2000);
     for(int i = 0; i < 8; i++)
     {

@@ -20,13 +20,13 @@ class Barometer
     int dig_P8;
     int dig_P9;
     float h0 = 0;
-    float pressure;
-    float temperature;
+    uint16_t pressure;
+    uint16_t temperature;
 
     public:
         bool init();
-        float getTemperature();
-        float getPressure();
+        uint16_t getTemperature();
+        uint16_t getPressure();
         float getHeight();
         void measure();
 };
