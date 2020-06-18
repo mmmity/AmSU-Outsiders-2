@@ -39,12 +39,11 @@ void setup()
     {
         leds[i] = 1;
     }
-    //reg.write(leds);
+    reg.write(leds);
     delay(2000);
-    for(int i = 0; i < 8; i++)
-    {
-        leds[i] = i < 2 ? 1 : 0;
-    } 
+    leds[0] = 1;
+    leds[1] = 1;
+    reg.write(leds);
     delay(8000);
     light.init();                           // А фоторезистор инициализируем после укомплектации
     leds[2] = 1;

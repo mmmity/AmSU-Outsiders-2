@@ -5,7 +5,7 @@ void SerialLogger::init()
     Serial.begin(BAUD_RATE);
 }
 
-void SerialLogger::writeCanSat(String teamID, long time, float alt, float a, bool stp, bool spp, bool rcp, bool lnp)
+void SerialLogger::writeCanSat(String teamID, long time, double alt, uint32_t a, bool stp, bool spp, bool rcp, bool lnp)
 {
     Serial.print(teamID);
     Serial.print(";");
@@ -42,7 +42,7 @@ void SDLogger::write(String str)
     pf_write(buf, sizeof(buf), &nr);
 }
 
-void SDLogger::writeCanSat(String teamID, long time, float alt, float ax, float ay, float az, float gx, float gy, float gz, float mx, float my, float mz, float pressure, float temp, bool stp, bool spp, bool rcp, bool lnp)
+void SDLogger::writeCanSat(String teamID, long time, double alt, uint32_t ax, uint32_t ay, uint32_t az, uint32_t gx, uint32_t gy, uint32_t gz, uint32_t mx, uint32_t my, uint32_t mz, uint32_t pressure, uint32_t temp, bool stp, bool spp, bool rcp, bool lnp)
 {
     write(teamID);
     write(";");

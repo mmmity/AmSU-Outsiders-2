@@ -10,7 +10,7 @@ class SerialLogger
 {
     public:
         void init();
-        void writeCanSat(String teamID, long time, float alt, float a, bool stp, bool spp, bool rcp, bool lnp);
+        void writeCanSat(String teamID, long time, double alt, uint32_t a, bool stp, bool spp, bool rcp, bool lnp);
 };
 
 class SDLogger
@@ -19,7 +19,7 @@ class SDLogger
     public:
         void init();
         void write(String str);
-        void writeCanSat(String teamID, long time, float alt, float ax, float ay, float az, float gx, float gy, float gz, float mx, float my, float mz, float pressure, float temp, bool stp, bool spp, bool rcp, bool lnp);
+        void writeCanSat(String teamID, long time, double alt, uint32_t ax, uint32_t ay, uint32_t az, uint32_t gx, uint32_t gy, uint32_t gz, uint32_t mx, uint32_t my, uint32_t mz, uint32_t pressure, uint32_t temp, bool stp, bool spp, bool rcp, bool lnp);
 };
 
 #endif
