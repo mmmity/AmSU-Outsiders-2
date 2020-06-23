@@ -43,13 +43,13 @@
 #define ACCEL_LIMIT 8500
 #define PSO_PIN 7
 #define SERVO_PIN 9
-#define REG_SH_PIN 12
-#define REG_ST_PIN 8
-#define REG_DATA_PIN 11
+#define REG_SH_PIN 2
+#define REG_ST_PIN 3
+#define REG_DATA_PIN 4
 #define LIGHT_PIN A0
 #define BATTERY_PIN A5
-#define TEST_BUTTON_PIN 3
-#define USER_BUTTON_PIN 4
+#define TEST_BUTTON_PIN 5
+#define USER_BUTTON_PIN 6
 
 //===================================================//
 

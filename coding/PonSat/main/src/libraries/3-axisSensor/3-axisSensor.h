@@ -18,20 +18,20 @@
 #include "Arduino.h"
 
 class MPUSensor{
-    uint32_t aX, aY, aZ, gX, gY, gZ, mX, mY, mZ;
+    int16_t aX, aY, aZ, gX, gY, gZ, mX, mY, mZ;
     public:
         void init();
         void measure();
-        uint32_t getAcccelX();
-        uint32_t getAcccelY();
-        uint32_t getAcccelZ();
-        uint32_t getGyroX();
-        uint32_t getGyroY();
-        uint32_t getGyroZ();
-        uint32_t getMagX();
-        uint32_t getMagY();
-        uint32_t getMagZ();
-        uint32_t getAccel();
+        int16_t getAcccelX();
+        int16_t getAcccelY();
+        int16_t getAcccelZ();
+        int16_t getGyroX();
+        int16_t getGyroY();
+        int16_t getGyroZ();
+        int16_t getMagX();
+        int16_t getMagY();
+        int16_t getMagZ();
+        uint16_t getAccel();
         void I2Cread(uint8_t Address, uint8_t Register, uint8_t Nbytes, uint8_t* Data);
         void I2CwriteByte(uint8_t Address, uint8_t Register, uint8_t Data);     
 };

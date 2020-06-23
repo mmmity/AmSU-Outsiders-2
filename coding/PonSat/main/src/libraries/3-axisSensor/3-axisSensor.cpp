@@ -60,52 +60,52 @@ void MPUSensor::measure()
     mZ=-(Mag[5]<<8 | Mag[4]);
 }
 
-uint32_t MPUSensor::getAcccelX()
+int16_t MPUSensor::getAcccelX()
 {
     return aX;
 }
 
-uint32_t MPUSensor::getAcccelY()
+int16_t MPUSensor::getAcccelY()
 {
     return aY;
 }
 
-uint32_t MPUSensor::getAcccelZ()
+int16_t MPUSensor::getAcccelZ()
 {
     return aZ;
 }
 
-uint32_t MPUSensor::getGyroX()
+int16_t MPUSensor::getGyroX()
 {
     return gX;
 }
 
-uint32_t MPUSensor::getGyroY()
+int16_t MPUSensor::getGyroY()
 {
     return gY;
 }
 
-uint32_t MPUSensor::getGyroZ()
+int16_t MPUSensor::getGyroZ()
 {
     return gZ;
 }
 
-uint32_t MPUSensor::getMagX()
+int16_t MPUSensor::getMagX()
 {
     return mX;
 }
 
-uint32_t MPUSensor::getMagY()
+int16_t MPUSensor::getMagY()
 {
     return mY;
 }
 
-uint32_t MPUSensor::getMagZ()
+int16_t MPUSensor::getMagZ()
 {
     return mZ;
 }
 
-uint32_t MPUSensor::getAccel()
+uint16_t MPUSensor::getAccel()
 {
-    return sqrt(aX * aX + aY * aY + aZ * aZ);
+    return (uint16_t)sqrt(aX * aX + aY * aY + aZ * aZ);
 }

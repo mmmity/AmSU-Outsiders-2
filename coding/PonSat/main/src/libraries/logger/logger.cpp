@@ -5,7 +5,7 @@ void SerialLogger::init()
     Serial.begin(BAUD_RATE);
 }
 
-void SerialLogger::writeCanSat(String teamID, long time, double alt, uint32_t a, bool stp, bool spp, bool rcp, bool lnp)
+void SerialLogger::writeCanSat(String teamID, uint32_t time, uint16_t alt, uint16_t a, bool stp, bool spp, bool rcp, bool lnp)
 {
     Serial.print(teamID);
     Serial.print(";");
@@ -27,8 +27,16 @@ void SerialLogger::writeCanSat(String teamID, long time, double alt, uint32_t a,
 
 void SDLogger::init()
 {
-    while (pf_mount(&fs));
-    while (pf_open("FILE.TXT"));
+    while (pf_mount(&fs))
+    {
+        Serial.print("Anime\n");
+        delay(200);
+    } 
+    while (pf_open("FILE.TXT"))
+    {
+        Serial.print("For gays\n");
+        delay(200);
+    } 
 }
 
 void SDLogger::write(String str)
@@ -42,7 +50,7 @@ void SDLogger::write(String str)
     pf_write(buf, sizeof(buf), &nr);
 }
 
-void SDLogger::writeCanSat(String teamID, long time, double alt, uint32_t ax, uint32_t ay, uint32_t az, uint32_t gx, uint32_t gy, uint32_t gz, uint32_t mx, uint32_t my, uint32_t mz, uint32_t pressure, uint32_t temp, bool stp, bool spp, bool rcp, bool lnp)
+void SDLogger::writeCanSat(String teamID, uint32_t time, uint16_t alt, int16_t ax, int16_t ay, int16_t az, int16_t gx, int16_t gy, int16_t gz, int16_t mx, int16_t my, int16_t mz, uint16_t pressure, uint32_t temp, bool stp, bool spp, bool rcp, bool lnp)
 {
     write(teamID);
     write(";");

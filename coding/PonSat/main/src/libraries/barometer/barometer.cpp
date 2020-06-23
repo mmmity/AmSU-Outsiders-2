@@ -64,7 +64,7 @@ void Barometer::measure()
     double var1 = (((double)adc_t) / 16384.0 - ((double)dig_T1) / 1024.0) * ((double)dig_T2);
     double var2 = ((((double)adc_t) / 131072.0 - ((double)dig_T1) / 8192.0) * (((double)adc_t) / 131072.0 - ((double)dig_T1) / 8192.0)) * ((double)dig_T3);
     double t_fine = (long)(var1 + var2);
-    temperature = (long)(var1 + var2);
+    temperature = (int)(var1 + var2);
 
     // Pressure offset calculations
     var1 = ((double)t_fine / 2.0) - 64000.0;
@@ -78,19 +78,19 @@ void Barometer::measure()
     else p = 0;
     var1 = ((double) dig_P9) * p * p / 2147483648.0;
     var2 = p * ((double) dig_P8) / 32768.0;
-    pressure = (uint64_t)(p + (var1 + var2 + ((double)dig_P7)) / 16.0);
+    pressure = (uint16_t)(p + (var1 + var2 + ((double)dig_P7)) / 16.0) / 2;
 }
 
-uint32_t Barometer::getPressure()
+uint16_t Barometer::getPressure()
 {
     return pressure;
 }
 
-uint32_t Barometer::getTemperature()
+uint64_t Barometer::getTemperature()
 {
     return temperature;
 }
-double Barometer::getHeight()
+uint16_t Barometer::getHeight()
 {
-    return 44330 * (1.0 - pow(pressure / 101325.0, 0.1903)) - h0;
+    return uint16_t(44330 * (1.0 - pow(2 * pressure / 101325.0, 0.1903)) - h0);
 }

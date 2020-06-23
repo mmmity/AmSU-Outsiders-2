@@ -43,6 +43,7 @@ void setup()
     delay(2000);
     leds[0] = 1;
     leds[1] = 1;
+    for(int i = 2; i < 8; i++) leds[i] = 0;
     reg.write(leds);
     delay(8000);
     light.init();                           // А фоторезистор инициализируем после укомплектации
@@ -54,7 +55,6 @@ void loop()
     if (testBtn.pressed())
     {
         leds[3] = 1;
-        reg.write(leds);
         mpu.measure();
         if (mpu.getAcccelX() > 20000)
         {
@@ -71,11 +71,10 @@ void loop()
             if (testModeCounter >= 50) leds[7] = 1;
             testModeCounter ++ ;
         }
-        reg.write(leds);
-        delay(200);
     }
     else 
     {
+      for(int i = 3; i < 8; i ++) leds[i] = 0;
         bmp.measure();
         mpu.measure();
 
@@ -114,10 +113,9 @@ void loop()
             stp = 1;
             leds[4] = 1;
         }
-        
-        reg.write(leds);
         radio.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAccel(), stp, spp, rcp, lnp);
         sd.writeCanSat(TEAM_ID, millis(), bmp.getHeight(), mpu.getAcccelX(), mpu.getAcccelY(), mpu.getAcccelZ(), mpu.getGyroX(), mpu.getGyroX(), mpu.getGyroZ(), mpu.getMagX(), mpu.getMagY(), mpu.getMagZ(), bmp.getPressure(), bmp.getTemperature(), stp, spp, rcp, lnp);
-        delay(200);
     }
+    reg.write(leds);
+    delay(200);
 }
