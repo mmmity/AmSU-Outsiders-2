@@ -14,7 +14,7 @@
 #define ACC_FULL_SCALE_8_G 0x10
 #define ACC_FULL_SCALE_16_G 0x18
 
-#include <microWire.h>
+#include <Wire.h>
 #include "Arduino.h"
 
 class MPUSensor{

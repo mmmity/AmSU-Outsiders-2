@@ -2,7 +2,7 @@
 #define BAROMETER_H
 
 #include "Arduino.h"
-#include <microWire.h>
+#include <Wire.h>
 
 class Barometer
 {
