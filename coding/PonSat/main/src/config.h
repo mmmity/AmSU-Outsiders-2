@@ -47,7 +47,7 @@
 #define REG_ST_PIN 3
 #define REG_DATA_PIN 4
 #define LIGHT_PIN A0
-#define BATTERY_PIN A5
+#define BATTERY_PIN A2
 #define TEST_BUTTON_PIN 5
 #define USER_BUTTON_PIN 6
 
